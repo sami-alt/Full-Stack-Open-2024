@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant Browser
+    participant Server
+    Browser ->> Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+    Note left of Browser: Browser sends the note to backend where note is adde to the list
+    Note right of Server: Response from the servers is 302 code witch tells browser to do new request for the amended list with the new note
+    Server -->> Browser: 302 Found 
+    Browser ->> Server: HTTP GET https:https://studies.cs.helsinki.fi/exampleapp/notes
+    Server -->> Browser:HTML file
+    Browser ->> Server: HTTP GEt https://studies.cs.helsinki.fi/exampleapp/main.css
+    Server -->>  Browser: css file 
+    Browser ->> Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    Server -->> Browser: javaScript file
+    Note left of Browser: Browser sends the request to server 
+    Browser ->> Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    Server -->> Browser: "[{content: "wow", date:"2023-07-30T14:20:53.647Z" }...{content: "new Note", date:"2023-07-30T20:37:14.974Z" } ]"
+    Note left of Browser:  Browser runs the event handler that renders the list of notes including the new note
+    Browser ->> Server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
+    Note left of Browser: Server also sends GET request for favicon file
+    Server -->> Browser: HTML file
+    

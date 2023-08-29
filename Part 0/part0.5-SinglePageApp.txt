@@ -1,0 +1,16 @@
+sequenceDiagram
+    participant Browser
+    participant Server
+    Browser ->> Server: HTTP GET https:https://studies.cs.helsinki.fi/exampleapp/spa
+    Server -->> Browser:HTML file
+    Browser ->> Server: HTTP GEt https://studies.cs.helsinki.fi/exampleapp/main.css
+    Server -->>  Browser: css file 
+    Browser ->> Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+    Server -->> Browser: spa.js file
+    Note over Browser: spa.js file request json file with the notes from the server
+    Browser ->> Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    Server -->> Browser: {[content: "This is a new note", date: "2023-08-29T14:20:53.647Z"]}
+    Note over Browser: Brower runs event handlers that render the note on the site
+    Browser ->> Server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
+    Note over Server: Server also sends GET request for favicon file
+    Server -->> Browser: HTML file

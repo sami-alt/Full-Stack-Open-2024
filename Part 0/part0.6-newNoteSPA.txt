@@ -1,0 +1,8 @@
+sequenceDiagram
+    participant Browser
+    participant Server
+    Note over Browser: Browser sends the new note to server in a header as a json
+    Browser ->> Server: HTTP GET https:https://studies.cs.helsinki.fi/exampleapp/spa
+    Note over Server: Code 201 is show and a server creates a json object with the new note and returns both
+    Server -->> Browser: {"Message": "note created"}
+    Note over Browser: Only the the list (ul) part is rerendered
