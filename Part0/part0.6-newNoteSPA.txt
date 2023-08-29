@@ -5,4 +5,4 @@ sequenceDiagram
     Browser ->> Server: HTTP GET https:https://studies.cs.helsinki.fi/exampleapp/spa
     Note over Server: Code 201 is show and a server creates a json object with the new note and returns both
     Server -->> Browser: {"Message": "note created"}
-    Note over Browser: Only the the list (ul) part is rerendered
+    Note over Browser: Only the the list (ul) part is rerendered 
