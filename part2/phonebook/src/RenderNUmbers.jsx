@@ -2,7 +2,6 @@
 const RenderNumbers = (props) => {
     const {persons} = props
 
-
     return(
         <div>
             <ul>
@@ -10,7 +9,6 @@ const RenderNumbers = (props) => {
             </ul>
         </div>
     )
-
 }
 
 export default RenderNumbers
