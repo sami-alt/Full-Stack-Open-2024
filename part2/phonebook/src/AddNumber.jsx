@@ -1,4 +1,5 @@
 import { useState } from "react"
+import serverCalls from "./serverCalls"
 
 const AddPerson = (props) => {
     const [newName, setNewName] = useState('')
@@ -14,7 +15,7 @@ const AddPerson = (props) => {
             alert(`${newName} is already added to phonebook`)
             return
           }
-        setPersons(persons.concat({name: newName, number:newNumber, id: persons.length + 1}))  
+          serverCalls.createPerson({name: newName, number:newNumber}).then(response => setPersons(persons.concat(response))) 
     }
 
     const handleInputName = (event) => {
