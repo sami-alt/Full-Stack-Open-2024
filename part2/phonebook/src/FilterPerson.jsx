@@ -10,7 +10,6 @@ const SearchPerson = (props) => {
     
     const searchPersons = () => (persons.find(person => person.name === search))
     const found = searchPersons()
-
     const isNotFound = found === undefined
     
     return(

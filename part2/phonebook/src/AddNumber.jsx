@@ -8,11 +8,18 @@ const AddPerson = (props) => {
            
     const addPerson = (event) => {
         event.preventDefault()
-        const names = persons.map(person => person.name)
-        const dublicate = names.includes(newName)
         
-        if (dublicate) {
-            alert(`${newName} is already added to phonebook`)
+        const isDublicate =() => persons.find(person => person.name === newName)
+        const empty = isDublicate() === undefined
+        const toUpdate = isDublicate()
+        const updated = {...toUpdate, number: newNumber}
+        
+        if (!empty) {
+            if(confirm(`${newName} is already added to phonebook, replace the old number with a new one`)){
+            serverCalls
+            .updatePerson(toUpdate.id, updated)
+            .then(() => props.onNumberUpdated(updated.number, updated.id))
+          }
             return
           }
           serverCalls.createPerson({name: newName, number:newNumber}).then(response => setPersons(persons.concat(response))) 
