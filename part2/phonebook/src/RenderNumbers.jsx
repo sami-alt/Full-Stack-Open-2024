@@ -3,10 +3,6 @@ import DeletePerson from "./Deleteperson"
 const RenderNumbers = (props) => {
     const {persons} = props
 
-    const onPersonDeleted = () => {
-        location.reload()
-    }
-
     return(
         <div>
             <ul>

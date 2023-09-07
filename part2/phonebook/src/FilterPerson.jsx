@@ -8,7 +8,7 @@ const SearchPerson = (props) => {
         setSearch(event.target.value)
     }
     
-    const searchPersons = () => (persons.find(person => person.name === search))
+    const searchPersons = () => (persons.find(person => person.name.toLowerCase() === search.toLowerCase()))
     const found = searchPersons()
     const isNotFound = found === undefined
     
