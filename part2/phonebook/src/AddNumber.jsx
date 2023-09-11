@@ -21,7 +21,7 @@ const AddPerson = (props) => {
         serverCalls
           .updatePerson(toUpdate.id, updated)
           .catch(() => { console.log('here?'), props.setMessage({ content: `Adding ' ${newName}' failed`, type: 'error' }) })
-          .then(() =>props.onNumberUpdated(updated.number, updated.id))
+          .then(() =>props.onNumberUpdated(updated.number, updated.id), props.setMessage({content:`${updated.name}s number has been  updated`, type:'success'}))
 
         return
       }
