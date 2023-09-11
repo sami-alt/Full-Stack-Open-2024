@@ -11,7 +11,8 @@ const DeletePerson = (props) =>{
         confirm('delete ' + personToDelete + '?' )
         serverCalls
         .deletePerson(person.id)
-        .then(() => props.onPersonDeleted(person.id))
+        .catch(()=>{props.setMessage({content:`Person  ${person.name}  has alredy been deleted`, type:'error' })})
+        .then(() => props.onPersonDeleted(person.id), props.setMessage({content:`Person ${person.name} has been deleted`}))
     }
 
     return (
