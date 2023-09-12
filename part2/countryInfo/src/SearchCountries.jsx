@@ -3,6 +3,7 @@ const SearchCountries = (props) => {
     
     const handleInput = (event) => {
         event.preventDefault()
+        props.setShow(false)
         props.setSearch(event.target.value)
     }
 

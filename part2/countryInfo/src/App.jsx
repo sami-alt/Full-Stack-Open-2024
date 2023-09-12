@@ -6,6 +6,7 @@ import serverCalls from './ServerCallsCountry.jsx'
 function App() {
   const [countries, setCountries] = useState(null)
   const [search, setSearch] = useState('')
+  const [show, setShow] = useState(false)
 
   useEffect(() => {
     if (!countries) {
@@ -20,8 +21,8 @@ function App() {
 
   return (
     <div>
-      <SearchCountries search={search} setSearch={setSearch} />
-      <RenderCountries countries={countries} search={search}/>
+      <SearchCountries search={search} setSearch={setSearch}  setShow={setShow}/>
+      <RenderCountries countries={countries} search={search} show={show} setShow={setShow}/>
     </div>
   )
 }
