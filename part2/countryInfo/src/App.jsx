@@ -14,7 +14,6 @@ function App() {
         .catch(() => console.log('cant get countries front'))
         .then(response => {
           setCountries(response)
-          console.log('gets countries')
         })
     }
   }, [])

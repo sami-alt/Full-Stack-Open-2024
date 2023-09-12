@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react"
-import serverCalls from './ServerCallsCountry'
 
 const SearchCountries = (props) => {
     
