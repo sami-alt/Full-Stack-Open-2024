@@ -2,8 +2,12 @@ const http = require('http')
 const express = require('express')
 const app = express()
 const currentDate = new Date()
-
+const morgan = require('morgan')
+morgan.token('body', req => {
+    return JSON.stringify(req.body)
+})
 app.use(express.json())
+app.use(morgan(':method, :url, :body'))
 
 let numbers = [
     {
@@ -41,7 +45,6 @@ app.get('/api/numbers', (req, res) => {
 app.get('/api/numbers/:id', (req, res) => {
     const id = Number(req.params.id)
     const number = numbers.filter(number => number.id === id)
-    console.log('number',number)
     if (number.length !== 0) {
         res.json(number)
     } else {
@@ -54,7 +57,6 @@ app.get('/info', (req, res) => {
 })
 
 app.post('/api/numbers', (req,res) => {
-    
     if(!req.body.name || !req.body.number){
         return res.status(404).json({
             error:'name or number is epmty'
