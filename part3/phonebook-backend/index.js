@@ -31,7 +31,7 @@ let numbers = [
 const generateId = () => Math.floor(Math.random() * 5000)
      
 app.get('/', (req, res) => {
-    res.send('<h1>hello world</h1>')
+    res.send('<h1>Phonebook/h1>')
 })
 
 app.get('/api/numbers', (req, res) => {
@@ -76,8 +76,8 @@ app.post('/api/numbers', (req,res) => {
         number: req.body.number
     }
     
-    const newNumbers = numbers.concat(newNumber)
-    res.json(newNumbers)
+    numbers = numbers.concat(newNumber)
+    res.json(numbers)
 })
 
 app.delete('/api/numbers/:id', (req,res)=> {
