@@ -1,6 +1,7 @@
 const http = require('http')
 const express = require('express')
 const app = express()
+const currentDate =  new Date()
 
 
 const numbers = [
@@ -30,8 +31,12 @@ app.get('/', (req, res) => {
     res.send('<h1>hello world</h1>')
 })
 
-app.get('/api/numbers', (req, res) => {
+app.get('/numbers', (req, res) => {
     res.json(numbers)
+})
+
+app.get('/info', (req, res)=> {
+    res.send(`Phonebook has info for ${numbers.length} people <br/> ${currentDate}`)
 })
 
 const PORT = 3001
