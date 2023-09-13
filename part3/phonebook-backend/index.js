@@ -3,11 +3,13 @@ const express = require('express')
 const app = express()
 const currentDate = new Date()
 const morgan = require('morgan')
+const cors = require('cors')
 morgan.token('body', req => {
     return JSON.stringify(req.body)
 })
 app.use(express.json())
 app.use(morgan(':method, :url, :body'))
+app.use(cors())
 
 let numbers = [
     {
@@ -34,10 +36,6 @@ let numbers = [
 
 const generateId = () => Math.floor(Math.random() * 5000)
      
-app.get('/', (req, res) => {
-    res.send('<h1>Phonebook/h1>')
-})
-
 app.get('/api/numbers', (req, res) => {
     res.json(numbers)
 })
@@ -52,7 +50,7 @@ app.get('/api/numbers/:id', (req, res) => {
     }
 })
 
-app.get('/info', (req, res) => {
+app.get('info', (req, res) => {
     res.send(`Phonebook has info for ${numbers.length} people <br/> ${currentDate}`)
 })
 
@@ -77,9 +75,7 @@ app.post('/api/numbers', (req,res) => {
         name: req.body.name,
         number: req.body.number
     }
-    
-    numbers = numbers.concat(newNumber)
-    res.json(numbers)
+    res.json(newNumber)
 })
 
 app.delete('/api/numbers/:id', (req,res)=> {

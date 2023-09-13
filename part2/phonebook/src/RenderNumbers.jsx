@@ -2,6 +2,7 @@ import DeletePerson from "./Deleteperson"
 
 const RenderNumbers = (props) => {
     const {persons} = props
+    console.log('front render persons', persons)
 
     return(
         <div>
