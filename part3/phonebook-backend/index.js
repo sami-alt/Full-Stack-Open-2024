@@ -1,10 +1,11 @@
 const http = require('http')
 const express = require('express')
 const app = express()
-const currentDate =  new Date()
+const currentDate = new Date()
 
+app.use(express.json())
 
-const numbers = [
+let numbers = [
     {
         "id": 1,
         "name": "Arto Hellas",
@@ -27,16 +28,45 @@ const numbers = [
     }
 ]
 
+const generateId = () => Math.floor(Math.random() * 5000)
+     
 app.get('/', (req, res) => {
     res.send('<h1>hello world</h1>')
 })
 
-app.get('/numbers', (req, res) => {
+app.get('/api/numbers', (req, res) => {
     res.json(numbers)
 })
 
-app.get('/info', (req, res)=> {
+app.get('/api/numbers/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const number = numbers.filter(number => number.id === id)
+    console.log('number',number)
+    if (number.length !== 0) {
+        res.json(number)
+    } else {
+        res.status(404).end()
+    }
+})
+
+app.get('/info', (req, res) => {
     res.send(`Phonebook has info for ${numbers.length} people <br/> ${currentDate}`)
+})
+
+app.post('/api/numbers', (req,res) => {
+    const newNumber = {
+        id:generateId(),
+        name:'Jokke Suutarinen',
+        number: '050-6004784'
+    }
+    const newNumbers = numbers.concat(newNumber)
+    res.json(newNumbers)
+})
+
+app.delete('/api/numbers/:id', (req,res)=> {
+    const id = Number(req.params.id)
+    const newNumbers = numbers.filter(number => number.id !== id)
+    res.status(204).end()
 })
 
 const PORT = 3001
