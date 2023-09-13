@@ -54,11 +54,28 @@ app.get('/info', (req, res) => {
 })
 
 app.post('/api/numbers', (req,res) => {
+    
+    if(!req.body.name || !req.body.number){
+        return res.status(404).json({
+            error:'name or number is epmty'
+        })
+    }
+    
+    const names = numbers.map(number => number.name)
+    const found = names.includes(req.body.name)
+    
+    if(found){
+        return res.status(409).json({
+            error:'name already in numbers'
+        })
+    }
+
     const newNumber = {
         id:generateId(),
-        name:'Jokke Suutarinen',
-        number: '050-6004784'
+        name: req.body.name,
+        number: req.body.number
     }
+    
     const newNumbers = numbers.concat(newNumber)
     res.json(newNumbers)
 })
