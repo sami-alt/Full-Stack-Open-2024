@@ -6,7 +6,7 @@ if(process.argv.length < 3){
     process.exit()
 }
 
-const pw = import.meta.env.VITE_DB_KEY
+//const pw = import.meta.env.VITE_DB_KEY
 const password = process.argv[2]
 const nameToAdd = process.argv[3]
 const numberToAdd = process.argv[4]
@@ -21,7 +21,7 @@ const numberSchema = new mongoose.Schema({
     number: String
 })
 
-const phoneNumber = mongoose.model('Number', numberSchema)
+const phoneNumber = mongoose.model('Numbers', numberSchema)
 
 const num = new phoneNumber({
     name:nameToAdd,
@@ -29,6 +29,13 @@ const num = new phoneNumber({
 })
 
 num.save().then(result => {
-    console.log('num saved!')
+    console.log(`added ${nameToAdd} number ${numberToAdd} to phonebook`)
+    mongoose.connection.close()
+})
+
+phoneNumber.find({}).then(result=> {
+    result.forEach(num => {
+        console.log(num)
+    });
     mongoose.connection.close()
 })
