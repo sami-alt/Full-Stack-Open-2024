@@ -10,9 +10,7 @@ const AddPerson = (props) => {
     event.preventDefault()
 
     const isDublicate = () => persons.find(person => person.name === newName)
-    console.log(isDublicate())
     const empty = isDublicate() === undefined
-    console.log('empty', empty)
     const toUpdate = isDublicate()
     const updated = { ...toUpdate, number: newNumber }
 
@@ -20,7 +18,7 @@ const AddPerson = (props) => {
       if (confirm(`${newName} is already added to phonebook, replace the old number with a new one`)) {
         serverCalls
           .updatePerson(toUpdate.id, updated)
-          .catch(() => { console.log('here?'), props.setMessage({ content: `Adding ' ${newName}' failed`, type: 'error' }) })
+          .catch(() => { props.setMessage({ content: `Adding ' ${newName}' failed`, type: 'error' }) })
           .then(() =>props.onNumberUpdated(updated.number, updated.id), props.setMessage({content:`${updated.name}s number has been  updated`, type:'success'}))
 
         return
