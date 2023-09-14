@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'http://localhost:3001/api/numbers'
+const baseUrl = location.hostname === 'localhost' ? 'http://localhost:3001/api/numbers' : '/api/numbers'
 
 const  getAll = () => {
     const request = axios.get(baseUrl).catch(err => console.log(err))
