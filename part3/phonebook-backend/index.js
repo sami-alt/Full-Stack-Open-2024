@@ -4,7 +4,7 @@ const app = express()
 const currentDate = new Date()
 const morgan = require('morgan')
 const cors = require('cors')
-const e = require('cors')
+const mogoose = require('mongoose')
 morgan.token('body', req => {
     return JSON.stringify(req.body)
 })
@@ -13,35 +13,26 @@ app.use(morgan(':method, :url, :body'))
 app.use(cors())
 app.use(express.static('dist'))
 
-const mongoUrl = 'mongodb+srv://fullstackExer:<password>@phonebook.ejm04sj.mongodb.net/?retryWrites=true&w=majority'
+//const password = import.meta.env.VITE_DB_KEY
 
-let numbers = [
-    {
-        "id": 1,
-        "name": "Arto Hellas",
-        "number": "040-123456"
-    },
-    {
-        "id": 2,
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523"
-    },
-    {
-        "id": 3,
-        "name": "Dan Abramov",
-        "number": "12-43-234345"
-    },
-    {
-        "id": 4,
-        "name": "Mary Poppendieck",
-        "number": "39-23-642312"
-    }
-]
+const password = x4bYq92SPqgJzWvo
 
-const generateId = () => Math.floor(Math.random() * 5000)
+const mongoUrl = `mongodb+srv://fullstackExer:${password}@phonebook.ejm04sj.mongodb.net/phone-book?retryWrites=true&w=majority`
+
+mongoose.set('strictQuery', false)
+mongoose.connect(mongoUrlurl)
+
+const numberSchema = new mongoose.Schema({
+    name: String,
+    number: String
+})
+
+const phoneNumber = mongoose.model('Numbers', numberSchema)
      
 app.get('/api/numbers', (req, res) => {
-    res.json(numbers)
+    phoneNumber.find({}).then(result=> {
+        res.json(result)
+    })
 })
 
 app.get('/api/numbers/:id', (req, res) => {
@@ -75,7 +66,6 @@ app.post('/api/numbers', (req,res) => {
     }
 
     const newNumber = {
-        id:generateId(),
         name: req.body.name,
         number: req.body.number
     }
