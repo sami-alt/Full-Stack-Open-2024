@@ -4,7 +4,7 @@ const app = express()
 const currentDate = new Date()
 const morgan = require('morgan')
 const cors = require('cors')
-const mogoose = require('mongoose')
+const mongoose = require('mongoose')
 morgan.token('body', req => {
     return JSON.stringify(req.body)
 })
@@ -13,12 +13,12 @@ app.use(morgan(':method, :url, :body'))
 app.use(cors())
 app.use(express.static('dist'))
 
-const password = import.meta.env.VITE_DB_KEY
+const password = "x4bYq92SPqgJzWvo" //import.meta.env.VITE_DB_KEY
 
 const mongoUrl = `mongodb+srv://fullstackExer:${password}@phonebook.ejm04sj.mongodb.net/phone-book?retryWrites=true&w=majority`
 
 mongoose.set('strictQuery', false)
-mongoose.connect(mongoUrlurl)
+mongoose.connect(mongoUrl)
 
 const numberSchema = new mongoose.Schema({
     name: String,
