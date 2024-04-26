@@ -13,7 +13,7 @@ app.use(morgan(':method, :url, :body'))
 app.use(cors())
 app.use(express.static('dist'))
 
-const password = "x4bYq92SPqgJzWvo" //import.meta.env.VITE_DB_KEY
+const password = import.meta.env.VITE_DB_KEY
 
 const mongoUrl = `mongodb+srv://fullstackExer:${password}@phonebook.ejm04sj.mongodb.net/phone-book?retryWrites=true&w=majority`
 

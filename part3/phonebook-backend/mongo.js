@@ -6,10 +6,12 @@ if (process.argv.length < 3) {
     process.exit()
 }
 
-//const pw = import.meta.env.VITE_DB_KEY
-const password = process.argv[2]
-const nameToAdd = process.argv[3]
-const numberToAdd = process.argv[4]
+// const pw = import.meta.env.VITE_DB_KEY
+
+
+const password = process.argv[2] 
+const nameToAdd =  process.argv[3]
+const numberToAdd =  process.argv[4]
 
 const url = `mongodb+srv://fullstackExer:${password}@phonebook.ejm04sj.mongodb.net/phone-book?retryWrites=true&w=majority`
 
@@ -27,7 +29,7 @@ const num = new phoneNumber({
     name: nameToAdd,
     number: numberToAdd
 })
-console.log('num.name', num.name )
+// console.log('num.name', num.name )
 if (num.name !== undefined || num.number !== undefined) {
     num.save().then(result => {
         console.log(`added ${nameToAdd} number ${numberToAdd} to phonebook`)
