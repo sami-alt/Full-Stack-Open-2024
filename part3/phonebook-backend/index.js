@@ -51,8 +51,17 @@ app.get('info', (req, res) => {
 app.post('/api/numbers', (req,res) => {
     if(!req.body.name || !req.body.number){
         return res.status(404).json({
-            error:'name or number is epmty'
+            error:'name or number is empty'
         })
+    }else {
+        const newNum = new phoneNumber({
+            name:req.body.name,
+            number:req.body.number
+        })
+        newNum.save().then(()=> {
+            mongoose.connection.close()
+        })
+
     }
     
     const names = numbers.map(number => number.name)

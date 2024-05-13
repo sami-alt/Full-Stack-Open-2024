@@ -4,6 +4,7 @@
   "description": "fullstack exercises",
   "main": "index.js",
   "scripts": {
+    "prestart": "npm install",
     "start": "node index.js",
     "dev": "nodemon local.js",
     "test": "echo \"Error: no test specified\" && exit 1",
