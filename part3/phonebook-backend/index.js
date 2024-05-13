@@ -63,9 +63,14 @@ app.post('/api/numbers', (req,res) => {
         })
 
     }
-    
-    const names = numbers.map(number => number.name)
-    const found = names.includes(req.body.name)
+    let found
+    phoneNumber.find({}).then(numbers => {
+        const names = numbers.map(number => number.name)
+        found = names.includes(req.body.name)
+        mongoose.connection.close()
+    })
+
+
     
     if(found){
         return res.status(409).json({
