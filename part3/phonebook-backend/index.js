@@ -27,10 +27,10 @@ const numberSchema = new mongoose.Schema({
 })
 
 const phoneNumber = mongoose.model('Numbers', numberSchema)
-     
+
 app.get('/api/numbers', (req, res) => {
-    
-    phoneNumber.find({}).then(result=> {
+
+    phoneNumber.find({}).then(result => {
         res.json(result)
     })
 })
@@ -49,33 +49,32 @@ app.get('info', (req, res) => {
     res.send(`Phonebook has info for ${numbers.length} people <br/> ${currentDate}`)
 })
 
-app.post('/api/numbers', (req,res) => {
-    if(!req.body.name || !req.body.number){
+app.post('/api/numbers', (req, res) => {
+    if (!req.body.name || !req.body.number) {
         return res.status(404).json({
-            error:'name or number is empty'
+            error: 'name or number is empty'
         })
-    }else {
-        const newNum = new phoneNumber({
-            name:req.body.name,
-            number:req.body.number
-        })
-        newNum.save().then(()=> {
-            mongoose.connection.close()
-        })
-
     }
     let found
-    // phoneNumber.find({}).then(numbers => {
-    //     const names = numbers.map(number => number.name)
-    //     found = names.includes(req.body.name)
-    //     mongoose.connection.close()
-    // })
+    phoneNumber.find({}).then(numbers => {
+        const names = numbers.map(number => number.name)
+        found = names.includes(req.body.name)
+        mongoose.connection.close()
+    })
 
-    if(found){
+    if (found) {
         return res.status(409).json({
-            error:'name already in numbers'
+            error: 'name already in numbers'
         })
     }
+
+    const newNum = new phoneNumber({
+        name: req.body.name,
+        number: req.body.number
+    })
+    newNum.save().then(() => {
+        mongoose.connection.close()
+    })
 
     const newNumber = {
         name: req.body.name,
@@ -84,7 +83,7 @@ app.post('/api/numbers', (req,res) => {
     res.json(newNumber)
 })
 
-app.delete('/api/numbers/:id', (req,res)=> {
+app.delete('/api/numbers/:id', (req, res) => {
     const id = Number(req.params.id)
     const newNumbers = numbers.filter(number => number.id !== id)
     res.status(204).end()
