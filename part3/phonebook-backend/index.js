@@ -34,7 +34,7 @@ app.get('/api/numbers', (req, res) => {
         res.json(result)
     })
     
-}).catch(err => console.log(err))
+})
 
 app.get('/api/numbers/:id', (req, res) => {
     const id = Number(req.params.id)
@@ -83,7 +83,7 @@ app.post('/api/numbers', (req,res) => {
         number: req.body.number
     }
     res.json(newNumber)
-}).catch(err => next(err))
+})
 
 app.delete('/api/numbers/:id', (req,res)=> {
     const id = Number(req.params.id)
