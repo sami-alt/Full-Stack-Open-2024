@@ -33,7 +33,6 @@ app.get('/api/numbers', (req, res) => {
     phoneNumber.find({}).then(result=> {
         res.json(result)
     })
-    
 })
 
 app.get('/api/numbers/:id', (req, res) => {
