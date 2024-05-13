@@ -66,11 +66,11 @@ app.post('/api/numbers', (req,res) => {
 
     }
     let found
-    phoneNumber.find({}).then(numbers => {
-        const names = numbers.map(number => number.name)
-        found = names.includes(req.body.name)
-        mongoose.connection.close()
-    })
+    // phoneNumber.find({}).then(numbers => {
+    //     const names = numbers.map(number => number.name)
+    //     found = names.includes(req.body.name)
+    //     mongoose.connection.close()
+    // })
 
     if(found){
         return res.status(409).json({
@@ -83,7 +83,7 @@ app.post('/api/numbers', (req,res) => {
         number: req.body.number
     }
     res.json(newNumber)
-})
+}).catch(err => next(err))
 
 app.delete('/api/numbers/:id', (req,res)=> {
     const id = Number(req.params.id)
