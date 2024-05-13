@@ -29,10 +29,12 @@ const numberSchema = new mongoose.Schema({
 const phoneNumber = mongoose.model('Numbers', numberSchema)
      
 app.get('/api/numbers', (req, res) => {
+    
     phoneNumber.find({}).then(result=> {
         res.json(result)
     })
-})
+    
+}).catch(err => console.log(err))
 
 app.get('/api/numbers/:id', (req, res) => {
     const id = Number(req.params.id)
@@ -70,8 +72,6 @@ app.post('/api/numbers', (req,res) => {
         mongoose.connection.close()
     })
 
-
-    
     if(found){
         return res.status(409).json({
             error:'name already in numbers'
