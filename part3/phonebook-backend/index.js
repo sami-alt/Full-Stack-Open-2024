@@ -5,8 +5,6 @@ const currentDate = new Date()
 const morgan = require('morgan')
 const cors = require('cors')
 
-require('dotenv').config()
-
 const mongoose = require('mongoose')
 morgan.token('body', req => {
     return JSON.stringify(req.body)
