@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const baseUrl = location.hostname === 'localhost' ? 'http://localhost:3001/api/numbers' : '/api/numbers'
+const newBaseUrl = "https://online-phonebook-rwjh.onrender.com"
+const baseUrl = location.hostname === 'localhost' ? 'http://localhost:3001/api/numbers' : newBaseUrl+'/api/numbers'
 
 const  getAll = () => {
     const request = axios.get(baseUrl).catch(err => console.log(err))

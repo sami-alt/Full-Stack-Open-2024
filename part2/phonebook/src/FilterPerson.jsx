@@ -7,6 +7,10 @@ const SearchPerson = (props) => {
     const handleInput = (event) => {
         setSearch(event.target.value)
     }
+
+    if(!persons){
+        return null
+    }
     
     const searchPersons = () => (persons.find(person => person.name.toLowerCase() === search.toLowerCase()))
     const found = searchPersons()

@@ -2,7 +2,11 @@ import DeletePerson from "./Deleteperson"
 
 const RenderNumbers = (props) => {
     const {persons} = props
-  
+    
+    if(!persons){
+        return null
+    }
+
     return(
         <div>
             <ul>

@@ -7,7 +7,7 @@ const DeletePerson = (props) =>{
 
     const deletePerson = (event) =>{
         event.preventDefault()
-        const personToDelete =  person.name 
+        const personToDelete = person.name 
         confirm('delete ' + personToDelete + '?' )
         serverCalls
         .deletePerson(person.id)
