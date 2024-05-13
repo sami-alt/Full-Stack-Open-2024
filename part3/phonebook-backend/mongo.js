@@ -6,7 +6,7 @@ if (process.argv.length < 3) {
     process.exit()
 }
 
-// const pw = import.meta.env.VITE_DB_KEY
+const pw = process.env.VITE_DB_KEY
 
 
 const password = process.argv[2] 
