@@ -4,7 +4,7 @@ const app = express()
 const currentDate = new Date()
 const morgan = require('morgan')
 const cors = require('cors')
-
+require('dotenv').config()
 const mongoose = require('mongoose')
 morgan.token('body', req => {
     return JSON.stringify(req.body)
@@ -14,35 +14,20 @@ app.use(morgan(':method, :url, :body'))
 app.use(cors())
 app.use(express.static('dist'))
 
-const password = process.env.VITE_DB_KEY
-
-const mongoUrl = `mongodb+srv://fullstackExer:${password}@phonebook.ejm04sj.mongodb.net/phone-book?retryWrites=true&w=majority`
-
-mongoose.set('strictQuery', false)
-mongoose.connect(mongoUrl)
-
-const numberSchema = new mongoose.Schema({
-    name: String,
-    number: String
-})
-
-const phoneNumber = mongoose.model('Numbers', numberSchema)
+const phoneNumber = require('./models')
 
 app.get('/api/numbers', (req, res) => {
-
     phoneNumber.find({}).then(result => {
         res.json(result)
     })
 })
 
 app.get('/api/numbers/:id', (req, res) => {
-    const id = Number(req.params.id)
-    const number = numbers.filter(number => number.id === id)
-    if (number.length !== 0) {
-        res.json(number)
-    } else {
-        res.status(404).end()
-    }
+    const id = req.params.id
+    phoneNumber.findById(id).then((result)=> res.json(result))
+    
+        
+    
 })
 
 app.get('info', (req, res) => {
@@ -55,27 +40,14 @@ app.post('/api/numbers', (req, res) => {
             error: 'name or number is empty'
         })
     }
-    let found
-    phoneNumber.find({}).then(numbers => {
-        const names = numbers.map(number => number.name)
-        found = names.includes(req.body.name)
-        mongoose.connection.close()
-    })
-
-    if (found) {
-        return res.status(409).json({
-            error: 'name already in numbers'
-        })
-    }
-
     const newNum = new phoneNumber({
         name: req.body.name,
         number: req.body.number
     })
     newNum.save().then(() => {
-        mongoose.connection.close()
-    })
 
+    })
+    
     const newNumber = {
         name: req.body.name,
         number: req.body.number
@@ -83,9 +55,18 @@ app.post('/api/numbers', (req, res) => {
     res.json(newNumber)
 })
 
+
+app.put('/api/numbers/:id', (req, res) => {
+    const id = req.params.id
+    console.log(req.body.number)
+    console.log(id)
+    phoneNumber.findByIdAndUpdate(id, {number: req.body.number}).then(()=>console.log('number updated'))
+    res.end()
+})
+
 app.delete('/api/numbers/:id', (req, res) => {
-    const id = Number(req.params.id)
-    const newNumbers = numbers.filter(number => number.id !== id)
+    const id = req.params.id
+    phoneNumber.deleteOne({ _id: id }).then(() => console.log('del success'))
     res.status(204).end()
 })
 
