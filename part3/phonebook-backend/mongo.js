@@ -6,9 +6,6 @@ if (process.argv.length < 3) {
   process.exit()
 }
 
-const pw = process.env.VITE_DB_KEY
-
-
 const password = process.argv[2]
 const nameToAdd =  process.argv[3]
 const numberToAdd =  process.argv[4]
@@ -31,7 +28,7 @@ const num = new phoneNumber({
 })
 // console.log('num.name', num.name )
 if (num.name !== undefined || num.number !== undefined) {
-  num.save().then(result => {
+  num.save().then(() => {
     console.log(`added ${nameToAdd} number ${numberToAdd} to phonebook`)
     mongoose.connection.close()
   })
