@@ -6,6 +6,7 @@
   "scripts": {
     "prestart": "npm install",
     "start": "node index.js",
+    "lint":"eslint .",
     "dev": "nodemon local.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf dist && cd ../../part2/phonebook && npm run build && cp -r dist ../../part3/phonebook-backend",
@@ -15,13 +16,15 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "mongoose": "^7.5.1",
-    "morgan": "^1.10.0",
-    "dotenv": "^16.4.5"
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin-js": "^2.1.0",
     "dotenv": "^16.4.5",
+    "eslint": "^9.2.0",
     "nodemon": "^3.0.1"
   }
 }
