@@ -24,7 +24,16 @@ const AddPerson = (props) => {
         return
       }
     } else {
-      serverCalls.createPerson({ name: newName, number: newNumber }).then(response => setPersons(persons.concat(response)),  props.setMessage({ content: `Added  ${newName}`, type: 'success' }))
+      serverCalls.createPerson({ name: newName, number: newNumber })
+      .then(response => {
+        setPersons(persons.concat(response))
+        props.setMessage({ content: `Added  ${newName}`, type: 'success' })
+        console.log('hbhbh')
+      })
+      .catch(response => {
+        console.log(response, 'aaaah')
+        props.setMessage({content: response.response.data.message, type: 'error'})
+      })
     }
   
   }

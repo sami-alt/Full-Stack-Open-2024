@@ -5,6 +5,7 @@ const SearchPerson = (props) => {
     const {persons} = props
 
     const handleInput = (event) => {
+        
         setSearch(event.target.value)
     }
 

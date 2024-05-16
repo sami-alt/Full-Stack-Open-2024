@@ -17,7 +17,7 @@ const App = () => {
         setMessage({content:'No contact list found', type:'error'})
         setTimeout(() => { setMessage(null), 5000 })
       })
-      .then(response => setPersons(response))
+      .then(response => setPersons(response), console.log(persons))
   }, [])
   
   const personDelete = (deletedId) => {
@@ -36,12 +36,12 @@ const App = () => {
     })
     return setPersons(updatedPersons)
   }
-
+  
   return (
     <div>
       <h2>Phonebook</h2>
       <Message message={message} setMessage={setMessage}/>
-      <SearchPerson persons={persons}  />
+      <SearchPerson persons={persons} />
       <AddPerson persons={persons} setPersons={setPersons} onNumberUpdated={onNumberUpdated} setMessage={setMessage}/>
       <h2>Numbers</h2>
       <RenderNumbers persons={persons} onPersonDeleted={personDelete} setMessage={setMessage}/>
