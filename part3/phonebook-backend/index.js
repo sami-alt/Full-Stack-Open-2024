@@ -16,59 +16,73 @@ app.use(express.static('dist'))
 
 const phoneNumber = require('./models')
 
-app.get('/api/numbers', (req, res) => {
+const errorHandler = (error, request, response,  next) => {
+    console.log(error.message)
+    if (error.name === 'CastError'){
+        return response.status(400).send({error:"malformed id"})
+    } else if(error.name === 'ValidationError'){
+        return response.status(400).json({error: error.message})
+    }
+    next(error)
+}
+
+const unknownEndpoint = (req, res) => {
+    res.status(400)
+    .send({error:'unknonw endpoint'})
+}
+
+app.get('/api/numbers', (req, res, next) => {
     phoneNumber.find({}).then(result => {
         res.json(result)
     })
+    .catch(error => next(error))
 })
 
-app.get('/api/numbers/:id', (req, res) => {
+app.get('/api/numbers/:id', (req, res, next) => {
     const id = req.params.id
-    phoneNumber.findById(id).then((result)=> res.json(result))
-    
-        
-    
+    phoneNumber.findById(id)
+    .then((result)=> res.json(result))
+    .catch(error => next(error))
 })
 
-app.get('info', (req, res) => {
-    res.send(`Phonebook has info for ${numbers.length} people <br/> ${currentDate}`)
+app.get('/info', (req, res, next) => {
+    let numbers
+    phoneNumber.find({}).then(numbers =>(
+    res.send(`Phonebook has info for ${numbers.length} people <br/> ${currentDate}`)))
+    .catch(error => next(error))
 })
 
 app.post('/api/numbers', (req, res) => {
-    if (!req.body.name || !req.body.number) {
-        return res.status(404).json({
-            error: 'name or number is empty'
-        })
-    }
     const newNum = new phoneNumber({
         name: req.body.name,
         number: req.body.number
     })
-    newNum.save().then(() => {
-
-    })
+    newNum.save()
+    .then((newNum) => {
+        res.json(newNum)
+    }).catch(error => res.status(400).json(error))
     
-    const newNumber = {
-        name: req.body.name,
-        number: req.body.number
-    }
-    res.json(newNumber)
 })
 
-
-app.put('/api/numbers/:id', (req, res) => {
+app.put('/api/numbers/:id', (req, res, next) => {
     const id = req.params.id
-    console.log(req.body.number)
-    console.log(id)
-    phoneNumber.findByIdAndUpdate(id, {number: req.body.number}).then(()=>console.log('number updated'))
+    const updateNumber = req.body.number
+    phoneNumber.findByIdAndUpdate(id, {number:updateNumber},{new:true, runValidators:true, context:'query'})
+    .then(()=>console.log('number updated'))
+    .catch(error => next(error))
     res.end()
 })
 
-app.delete('/api/numbers/:id', (req, res) => {
+app.delete('/api/numbers/:id', (req, res, next) => {
     const id = req.params.id
-    phoneNumber.deleteOne({ _id: id }).then(() => console.log('del success'))
+    phoneNumber.deleteOne({ _id: id })
+    .then(() => console.log('del success'))
+    .catch(error => next(error))
     res.status(204).end()
 })
+
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen((PORT), () => {
