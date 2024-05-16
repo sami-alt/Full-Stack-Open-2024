@@ -8,28 +8,12 @@ export default [
     plugins: {
       '@stylistic': stylistic
     },
-    // 'overrides': [
-    //   {
-    //     'env': {
-    //       'node': true
-    //     },
-    //     'files': [
-    //       '.eslintrc.{js,cjs}'
-    //     ],
-    //     'parserOptions': {
-    //       'sourceType': 'script'
-    //     }
-    //   }
-    // ],
-    // 'parserOptions': {
-    //   'ecmaVersion': 'latest'
-    // },
-    // 'rules': {
-    // },
-    // 'plugins': [
-    //   '@stylistic/js'
-    // ],
-    // 'extends': 'eslint:recommended',
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      }
+    },
     'rules': {
       '@stylistic/indent': [
         'error',
@@ -57,9 +41,11 @@ export default [
       ],
       'no-console': 0
     },
-
-    'ignores': ['.dist/**/*']
-
+  },
+  {
+    ignores: [
+      '**/dist/*'
+    ]
   }
 ]
 
