@@ -1,55 +1,59 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 
-blogsRouter.get('/', (req, res) => {
-  Blog.find({})
-    .then(blogs => {res.json(blogs)})
+blogsRouter.get('/', async (req, res) => {
+  const blogs = await Blog.find({})
+  res.json(blogs)
 })
 
-blogsRouter.get('/:id', (req, res, next) => {
+blogsRouter.get('/:id', async (req, res) => {
   const id = req.params.id
+
+  const blog = await Blog.findById(id)
   Blog.findById(id)
-    .then( blog => {
-      if(blog){
-        res.json(blog)
-      } else {
-        res.status(404).end()
-      }
-    }
-    ).catch(error => next(error))
+
+  if (blog) {
+    res.json(blog)
+  } else {
+    res.status(404).end()
+  }
 })
 
-blogsRouter.post('/', (req, res, next) => {
+
+blogsRouter.post('/', async (req, res) => {
+  // console.log(req, 'post blog')
+  if (!req.body.title || !req.body.url){
+    res.status(400).end()
+    return
+  }
 
   const blog = new Blog({
     title: req.body.title,
     author: req.body.author,
     url: req.body.url,
-    likes: req.body.likes
+    likes: req.body.likes ? req.body.likes : 0
   })
-
-  blog.save()
-    .then(blog => {
-      res.json(blog)
-    })
-    .catch(error => next(error))
+  const postedBlog = await blog.save()
+  res.status(201).json(postedBlog)
 
 })
 
-blogsRouter.delete('/:id', (req, res, next) => {
+blogsRouter.delete('/:id', async (req, res) => {
   const id = req.params.id
 
-  Blog.findByIdAndDelete(id)
-    .then(() => {
-      res.status(204).end()
-    })
-    .catch(error => next(error))
+  await Blog.findByIdAndDelete(id)
+  res.status(204).end()
 
 })
 
-blogsRouter.put('/:id', (req, res, next) => {
-  const id = req.params.id
+blogsRouter.delete('/', async(req, res) => {
+  await Blog.deleteMany({})
+  res.status(204).end()
+})
 
+blogsRouter.put('/:id',async (req, res) => {
+  const id = req.params.id
+  // console.log(req.body.likes)
   const updatedBlog = {
     title: req.body.title,
     author: req.body.author,
@@ -57,11 +61,9 @@ blogsRouter.put('/:id', (req, res, next) => {
     likes: req.body.likes
   }
 
-  Blog.findByIdAndUpdate(id, { updatedBlog }, { new:true, runValidators: true })
-    .then(updateBlog => {
-      res.json(updateBlog)
-    })
-    .catch(error => next(error))
+  const updateBlog = await Blog.findByIdAndUpdate(id, { updatedBlog },{ new:true, runValidators:true })
+
+  res.json(updateBlog)
 })
 
 module.exports = blogsRouter
