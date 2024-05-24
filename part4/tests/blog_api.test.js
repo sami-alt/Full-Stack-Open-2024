@@ -100,7 +100,7 @@ test('verify that if title or ulr properties are missing reponse is 400',async (
     
 })
 
-test.only('Delete a blog post by id', async ()=> {
+test('Delete a blog post by id', async ()=> {
   const testNewBlogPost = {
     title: 'Test deleteting',
     author: 'Test writer',
@@ -122,7 +122,34 @@ test.only('Delete a blog post by id', async ()=> {
 
 })
 
+test.only('test updating information on individual post by id', async ()=> {
+  const NewBlogPost = {
+    title: 'Test updating',
+    author: 'Test writer',
+    url: 'updated.test',
+    likes: 5 //5
+  }
 
+  const updatedPost = {
+    title: 'Test updated',
+    author: 'Test writer',
+    url: 'updated.test',
+    likes: 10
+  }
+
+  const newPost = await api.post('/api/blogs')
+    .send(NewBlogPost)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const id = newPost.body.id
+  console.log(id, typeof(id))
+  await api.put(`/api/blogs/${id}`).send(updatedPost).expect(200)
+    
+  let updatedCheck = await api.get(`/api/blogs/${id}`)
+
+  assert.notDeepStrictEqual(newPost.body, updatedCheck.body)
+})
 
 after(async () => {
   await mongoose.connection.close()
