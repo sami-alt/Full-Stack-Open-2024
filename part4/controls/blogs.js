@@ -15,7 +15,7 @@ blogsRouter.get('/:id', async (req, res) => {
   if (blog) {
     res.json(blog)
   } else {
-    res.status(404).end()
+    res.status(204).end()
   }
 })
 
@@ -35,6 +35,7 @@ blogsRouter.post('/', async (req, res) => {
   })
   const postedBlog = await blog.save()
   res.status(201).json(postedBlog)
+  // console.log(postedBlog)
 
 })
 

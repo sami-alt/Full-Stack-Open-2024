@@ -1,4 +1,4 @@
-const { test, after, before, beforeEach } = require('node:test')
+const { test, after, before, only } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -20,7 +20,7 @@ before(async () => {
     .expect(201)
 })
 
-test.only('Correct amount of blogs are returned in a json format', async () => {
+test('Correct amount of blogs are returned in a json format', async () => {
   await api
     .get('/api/blogs')
     .expect(200)
@@ -52,12 +52,18 @@ test('Verify posted blogs content and that it was deposited in db', async () => 
 
   const lenAfter = await api.get('/api/blogs')
   const titles = lenAfter.body.map((blog) => blog.title)
-  // const authors =lenAfter.body.map((blog) => blog.author)
-  // const ulrs = lenAfter.body.map((blog) => blog.urls)
-  // const likes = lenAfter.body.map((blog) => blog.likes)
+  const authors = lenAfter.body.map((blog) => blog.author)
+  const urls = lenAfter.body.map((blog) => blog.urls)
+  const likes = lenAfter.body.map((blog) => blog.likes)
 
-  const contents = titles.includes(testNewBlogPost.title)
-  assert.strictEqual(contents, true)
+  const contentsTitle = titles.includes(testNewBlogPost.title)
+  const contentsAuthor = authors.includes(testNewBlogPost.author)
+  const contentsUrl = urls.includes(testNewBlogPost.urls)
+  const contentsLikes = likes.includes(testNewBlogPost.likes)
+  assert.strictEqual(contentsTitle, true)
+  assert.strictEqual(contentsAuthor, true)
+  assert.strictEqual(contentsUrl, true)
+  assert.strictEqual(contentsLikes, true)
   assert.strictEqual(lenAfter.body.length, lenBefore + 1)
 
 })
@@ -94,8 +100,30 @@ test('verify that if title or ulr properties are missing reponse is 400',async (
     
 })
 
+test.only('Delete a blog post by id', async ()=> {
+  const testNewBlogPost = {
+    title: 'Test deleteting',
+    author: 'Test writer',
+    url: 'delete.test',
+    likes: 7
+  }
+
+  const newPost = await api.post('/api/blogs')
+    .send(testNewBlogPost)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const id = newPost.body.id
+  
+  await api.delete(`/api/blogs/${id}`)
+    .expect(204)
+
+  await api.get(`/api/blogs/${id}`).expect(204)
+
+})
+
+
 
 after(async () => {
- 
   await mongoose.connection.close()
 })
