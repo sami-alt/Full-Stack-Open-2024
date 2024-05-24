@@ -6,13 +6,19 @@ const blogsRouter = require('./controls/blogs')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 const mongoose = require('mongoose')
+require('express-async-errors')
 
 mongoose.set('strictQuery', false)
 
-mongoose.connect(config.MONGODB_URI)
-  .then(() => logger.info('Connected to MongoDB'))
-  .catch((error) =>
-  {logger.error('Error connetig to MongoDb', error.messasge)})
+async function connectDb(){
+    await mongoose.connect(config.MONGODB_URI)
+    logger.info('Connected to MongoDB')
+}
+connectDb()
+// mongoose.connect(config.MONGODB_URI)
+//   .then(() => logger.info('Connected to MongoDB'))
+//   .catch((error) =>
+//   {logger.error('Error connetig to MongoDb', error.messasge)})
 
 app.use(cors())
 app.use(express.static('dist'))
