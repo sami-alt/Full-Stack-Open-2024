@@ -1,4 +1,5 @@
 const logger = require('./logger')
+// const jwt = require('jsonwebtoken')
 
 const requestLogger = (req, res, next) => {
   logger.info('Method: ', req.method)
@@ -28,7 +29,7 @@ const errorHandler = (error, req, res, next) => {
 
 const tokenExtractor = (req, res, next) => {
   const authorization = req.headers.authorization
-  if (authorization && authorization.startsWith('Bearer')){
+  if (authorization && authorization.startsWith('Bearer')) {
     req.token = authorization.replace('Bearer ', '')
   } else {
     req.token = null
@@ -37,6 +38,11 @@ const tokenExtractor = (req, res, next) => {
 }
 
 const userExtractor = (req, res, next) => {
+  const base64Url = req.headers.authorization.replace('Bearer ', '').split('.')[1] // token you get
+  const base64 = base64Url.replace('-', '+').replace('_', '/')
+  const decodedData = JSON.parse(Buffer.from(base64, 'base64').toString('binary'))
+  req.user = decodedData
+  // console.log(decodedData, 'username????')
   next()
 }
 
