@@ -111,6 +111,8 @@ describe('Test adding users in db', () => {
 
 test('login needed to post and blog is asigned to logge in user', () => {
 
+
+
 })
 
 test('only a blog owner can delete a blog and on failure returns status code 401', () => {
