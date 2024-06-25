@@ -13,8 +13,7 @@ const unknowEndpoint = (req, res) => {
 }
 
 const errorHandler = (error, req, res, next) => {
-
-  logger.error(error.message)
+  // logger.error(error.message)
   if (error.name === 'CastError') {
     return res.status(400).send({ error: 'Malformed id' })
   } else if (error.name === 'ValidationError') {
@@ -27,8 +26,24 @@ const errorHandler = (error, req, res, next) => {
   next(error)
 }
 
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.headers.authorization
+  if (authorization && authorization.startsWith('Bearer')){
+    req.token = authorization.replace('Bearer ', '')
+  } else {
+    req.token = null
+  }
+  next()
+}
+
+const userExtractor = (req, res, next) => {
+  next()
+}
+
 module.exports = {
   requestLogger,
   unknowEndpoint,
-  errorHandler
+  errorHandler,
+  tokenExtractor,
+  userExtractor
 }

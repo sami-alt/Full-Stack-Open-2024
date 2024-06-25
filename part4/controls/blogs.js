@@ -4,21 +4,22 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 
-const getTokenFrom = req => {
-  const authorization = req.get('authorization')
-  if (authorization && authorization.startsWith('Bearer')){
-    // console.log(authorization)
-    const auth = authorization.replace('Bearer ', '')
-    // console.log(auth)
-    return auth
-  }
-  return null
-}
+// const getTokenFrom = req => {
+//   console.log(req.headers,'header')
+//   const authorization = req.get('authorization')
+//   if (authorization && authorization.startsWith('Bearer')){
+//     // console.log(authorization)
+//     const auth = authorization.replace('Bearer ', '')
+//     // console.log(auth)
+//     return auth
+//   }
+//   return null
+// }
 
 
 
 blogsRouter.get('/', async (req, res) => {
-  const blogs = await Blog.find({}).populate('user', {username:1, name:1, id:1})
+  const blogs = await Blog.find({}).populate('user', { username:1, name:1, id:1 })
   res.json(blogs)
 })
 
@@ -37,12 +38,12 @@ blogsRouter.get('/:id', async (req, res) => {
 
 
 blogsRouter.post('/', async (req, res) => {
-  console.log(process.env.SECRET)
-  console.log(getTokenFrom(req))
-  const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-  
+  // console.log(process.env.SECRET)
+  // console.log(getTokenFrom(req))
+  console.log(req.token, 'token')
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
   if(!decodedToken.id){
-    return res.status(401).json({error:'token invalid'})
+    return res.status(401).json({ error:'token invalid' })
   }
 
 
