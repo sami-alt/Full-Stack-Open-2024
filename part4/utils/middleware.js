@@ -1,5 +1,5 @@
 const logger = require('./logger')
-// const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
 const requestLogger = (req, res, next) => {
   logger.info('Method: ', req.method)
@@ -14,13 +14,15 @@ const unknowEndpoint = (req, res) => {
 }
 
 const errorHandler = (error, req, res, next) => {
-  // logger.error(error.message)
+  logger.error(error.message, 'message')
   if (error.name === 'CastError') {
     return res.status(400).send({ error: 'Malformed id' })
   } else if (error.name === 'ValidationError') {
     return res.status(400).send({ error: error.message })
   } else if (error.name === 'MongoServerError' && error.message.includes('E11000 duplicate key error')) {
     return res.status(409).json({ error: 'expected `username` to be unique' })
+  }else if (error.name === 'JsonWebTokenError' && error.message.includes('jwt must be provided')){
+    return res.status(401).json({ error:'missing jwt token' })
   } else if (error.name === 'JsonWebTokenError') {
     return res.status(401).json({ error: 'token invalid' })
   }
@@ -28,22 +30,29 @@ const errorHandler = (error, req, res, next) => {
 }
 
 const tokenExtractor = (req, res, next) => {
-  const authorization = req.headers.authorization
-  if (authorization && authorization.startsWith('Bearer')) {
-    req.token = authorization.replace('Bearer ', '')
-  } else {
-    req.token = null
+  // console.log('token extract')
+  try {
+    const authorization = req.headers.authorization
+    if (authorization && authorization.startsWith('Bearer')) {
+      req.token = authorization.replace('Bearer ', '')
+    } else {
+      req.token = null
+    }
+    next()
+  } catch (err) {
+    console.error(err)
+    next(err)
   }
-  next()
 }
 
 const userExtractor = (req, res, next) => {
-  const base64Url = req.headers.authorization.replace('Bearer ', '').split('.')[1] // token you get
-  const base64 = base64Url.replace('-', '+').replace('_', '/')
-  const decodedData = JSON.parse(Buffer.from(base64, 'base64').toString('binary'))
-  req.user = decodedData
-  // console.log(decodedData, 'username????')
-  next()
+  try {
+    // console.log(req.token, 'username????')
+    req.user = jwt.verify(req.token, process.env.SECRET)
+    next()
+  } catch (err) {
+    next(err)
+  }
 }
 
 module.exports = {

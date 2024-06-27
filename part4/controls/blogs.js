@@ -26,19 +26,16 @@ blogsRouter.get('/:id', async (req, res) => {
 })
 
 
-blogsRouter.post('/', middleware.userExtractor ,async (req, res) => {
+blogsRouter.post('/', middleware.userExtractor , async (req, res) => {
   // console.log(process.env.SECRET)
-  // console.log(getTokenFrom(req))
   // console.log(req.token, 'token')
-  const decodedToken = jwt.verify(req.token, process.env.SECRET)
+  // console.log('aaaa')
   // console.log(decodedToken, 'decodedtoken')
-  console.log(req.user, decodedToken, 'usermiddelware' )
+  // console.log(req.user === decodedToken, 'usermiddelware' )
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
   if(!decodedToken.id){
     return res.status(401).json({ error:'token invalid' })
   }
-
-
-  const user = await User.findById(req.user.id)
 
   if (!req.body.title || !req.body.url) {
     res.status(400).end()
@@ -50,9 +47,12 @@ blogsRouter.post('/', middleware.userExtractor ,async (req, res) => {
     author: req.body.author,
     url: req.body.url,
     likes: req.body.likes ? req.body.likes : 0,
-    user: user._id
+    user: req.user.id
   })
+
   const postedBlog = await blog.save()
+
+  const user = await User.findById(req.user.id)
 
   user.blogs = user.blogs.concat(postedBlog._id)
 
@@ -69,15 +69,15 @@ blogsRouter.post('/', middleware.userExtractor ,async (req, res) => {
 
 blogsRouter.delete('/:id', middleware.userExtractor ,async (req, res) => {
   const id = req.params.id
-
+  // console.log('deleting')
   const decodedToken = jwt.verify(req.token, process.env.SECRET)
   // console.log(decodedToken, 'decodedtoken')
   if(!decodedToken.id){
     return res.status(401).json({ error:'token invalid' })
   }
-  // console.log(decodedToken, 'token')
-
-  const user = await User.findById(req.user.id)
+  // // console.log(decodedToken, 'token')
+  // console.log(req.user, 'user')
+  // const user = await User.findById(req.user.id)
   const blog = await Blog.findById(id)
 
   // console.log(blog, 'blog')
@@ -88,9 +88,10 @@ blogsRouter.delete('/:id', middleware.userExtractor ,async (req, res) => {
     res.status(404).json({ error:`no blog by id ${id}` })
   }
 
-  if (user._id.toString() === blog.user.toString()){
+  if (req.user.id.toString() === blog.user.toString()){
+    // console.log('aaah')
     await Blog.findByIdAndDelete(id)
-    res.status(200).end
+    res.status(204).end()
   }else {
     res.status(401).end()
   }

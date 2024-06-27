@@ -3,8 +3,6 @@ const bcryptjs = require('bcryptjs')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
 
-
-
 usersRouter.get('/', async (req, res) => {
   const users = await User.find({}).populate('blogs',{ title:1, author:1, url:1, likes:1, })
   // console.log( users,'aaaa')
@@ -28,7 +26,6 @@ usersRouter.post('/', async (req,res) => {
   //   return res.status(409).json({error:"username already exists"})
   // }
 
-
   const saltRounds = 10
   const passwordHash = await bcryptjs.hash(password, saltRounds)
 
@@ -47,8 +44,6 @@ usersRouter.post('/', async (req,res) => {
   }
 
 })
-
-
 
 usersRouter.delete('/', async (req, res) => {
   // console.log('delete users')

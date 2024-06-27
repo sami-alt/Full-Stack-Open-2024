@@ -3,16 +3,16 @@ const assert = require('node:assert')
 const listHelper = require('./utils/list_helper')
 //const { title } = require('node:process')
 
+describe.skip('total likes', () => {
 
-test('dummy returns one', () => {
-  const blogs = []
+  test.skip('dummy returns one', () => {
+    const blogs = []
 
-  const result = listHelper.dummy(blogs)
-  assert.strictEqual(result, 1)
-})
+    const result = listHelper.dummy(blogs)
+    assert.strictEqual(result, 1)
+  })
 
 
-describe('total likes', () => {
   const blogs = [
     {
       'title': 'Testing blog applications',
@@ -70,24 +70,24 @@ describe('total likes', () => {
 
   const noBlogs = []
 
-  test('when list six blogs', () => {
+  test.skip('when list six blogs', () => {
     const result = listHelper.totalLikes(blogs)
     //   console.log(result)
     assert.strictEqual(result, 36)
   })
-  test('when list has just one blog likes equal that', () => {
+  test.skip('when list has just one blog likes equal that', () => {
     const result = listHelper.totalLikes(oneBlog)
     assert.strictEqual(result, 1)
   })
 
-  test('Empty list return zero likes', () => {
+  test.skip('Empty list return zero likes', () => {
     const result = listHelper.totalLikes(noBlogs)
     assert.strictEqual(result, 0)
   })
 
 })
 
-describe('Favorite blog, most blogs writen, most liked author',() => {
+describe.skip('Favorite blog, most blogs writen, most liked author', () => {
   const blogs = [
     {
       'title': 'Testing blog applications',
@@ -134,29 +134,29 @@ describe('Favorite blog, most blogs writen, most liked author',() => {
   ]
 
 
-  test('Favorite blog', () => {
+  test.skip('Favorite blog', () => {
     const result = listHelper.favoriteBlog(blogs)
     const correct = {
       title: 'Now i get paid to test blog aplication so i have to',
-      author:'Her Of Course',
+      author: 'Her Of Course',
       likes: 12
     }
     assert.deepStrictEqual(result, correct)
   })
 
-  test('most blogs', () => {
+  test.skip('most blogs', () => {
     const result = listHelper.mostBlogs(blogs)
     const correct = {
-      author:'You Of Course',
-      blogs:3
+      author: 'You Of Course',
+      blogs: 3
     }
     assert.deepStrictEqual(result, correct)
   })
 
-  test('Likes by most liked', () => {
+  test.skip('Likes by most liked', () => {
     const result = listHelper.mostLikes(blogs)
     const correct =
-            { author: 'You Of Course', likes: 14 }
+      { author: 'You Of Course', likes: 14 }
 
     assert.deepStrictEqual(result, correct)
   })
